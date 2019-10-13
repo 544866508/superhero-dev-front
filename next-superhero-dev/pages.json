@@ -12,7 +12,7 @@
 	    ,{
             "path" : "pages/search/search",
             "style" : {
-				"navigationBarTitleText": "搜索预告片"
+				"navigationBarTitleText": "搜索"
 			}
         }
         ,{
@@ -29,10 +29,42 @@
             "path" : "pages/login/login",
             "style" : {}
         }
+        ,{
+            "path" : "pages/account_info/account_info",
+            "style" : {
+				"navigationBarTitleText": "账号信息"
+			}
+        }
+        ,{
+            "path" : "pages/register/register",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/me_setup/me_setup",
+            "style" : {
+				"navigationBarTitleText": "设置"
+			}
+        }
+        ,{
+            "path" : "pages/account_info/action/change_nickname",
+            "style" : {}
+        }
+		,{
+		    "path" : "pages/account_info/action/change_saysth",
+		    "style" : {}
+		}
+		,{
+		    "path" : "pages/account_info/action/change_birthday",
+		    "style" : {}
+		}
+		,{
+		    "path" : "pages/account_info/action/change_face",
+		    "style" : {}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "NEXT超英预告",
+		"navigationBarTitleText": "云预告",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},

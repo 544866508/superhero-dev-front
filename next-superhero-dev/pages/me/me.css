@@ -3,7 +3,9 @@
 	height: 250upx;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+}
+.face-wapper {
+	width: 30%;
 }
 .face {
 	width: 180upx;
@@ -13,9 +15,29 @@
 	border-radius: 100%;
 }
 .info-wapper {
-	margin-right: 50upx;
-	margin-top: 50upx;
+	width: 60%;
 }
+
+.info-darkgray {
+	font-size: 16px;
+	color: darkgray;
+}
+.info-black {
+	font-size: 16px;
+	color: black;
+}
+.ico {
+	width: 50upx;
+	height: 50upx;
+}
+.u-info-wapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	background-color: white;
+	padding: 20upx 30upx 20upx 30upx;
+}
+
 .name {
 	font-size: 16px;
 	font-weight: bold;
@@ -24,14 +46,11 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.info {
-	font-size: 14px;
-	color: darkgray;
+.button {
+	margin-top: 30upx;
+	width: 90%;
 }
-.ico {
-	margin-top: 50upx;
-	width: 50upx;
-	height: 50upx;
-	margin-right: 50upx;
+.row-wapper {
+	display: flex;
+	flex-direction: row;
 }
-

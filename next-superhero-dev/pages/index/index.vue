@@ -107,7 +107,6 @@
 </template>
 
 <script>
-	import common from "../../common/common.js"
 	//倒入自定义组件
 	import scoreComp from "../../components/scoreComp.vue"
 	
@@ -137,21 +136,19 @@
 			this.animationData = {};
 		},
 		//生命周期函数，加载页面
-		onLoad() {
-			var apiServer = common.apiServer, mediaServer = common.mediaServer;
-			
+		onLoad() {		
 			//在页面创建的时候，创建一个临时的动画对象
 			this.adnimation = uni.createAnimation({
 				
 			})
 			
-			//请求轮播图数据
+			//请求轮播图数据 
 			uni.request({
-				url: apiServer + 'api/v1/get/swiper/',
+				url: this.apiServer + 'api/v1/get/swiper/',
 				method: 'GET',
 				success: res => {
 					for(var k in res.data){
-						res.data[k].img = mediaServer + res.data[k].img
+						res.data[k].img = this.mediaServer + res.data[k].img
 					}
 					this.swiperList = res.data
 					console.log(this.swiperList)
@@ -162,14 +159,14 @@
 			});
 			//请求主页影片
 			uni.request({
-				url: apiServer + 'api/v1/get/film/',
+				url: this.apiServer + 'api/v1/get/film/',
 				method: 'GET',
 				success: res => {
 					for(var k in res.data){
-						res.data[k].cover = mediaServer + res.data[k].cover;
-						res.data[k].trailer = mediaServer + res.data[k].trailer;
+						res.data[k].cover = this.mediaServer + res.data[k].cover;
+						res.data[k].trailer = this.mediaServer + res.data[k].trailer;
 						for(var j in res.data[k].poster){
-							res.data[k].poster[j].poster = mediaServer + res.data[k].poster[j].poster;
+							res.data[k].poster[j].poster = this.mediaServer + res.data[k].poster[j].poster;
 						}
 					}
 					for(var k in res.data){
@@ -221,17 +218,16 @@
 				//导航栏上展示一个加载动画
 				uni.showNavigationBarLoading()
 				
-				var apiServer = common.apiServer, mediaServer = common.mediaServer;
 				//请求猜你喜欢的影片
 				uni.request({
-					url: apiServer + 'api/v1/get/guessfilm/',
+					url: this.apiServer + 'api/v1/get/guessfilm/',
 					method: 'GET',
 					success: res => {
 						for(var k in res.data){
-							res.data[k].cover = mediaServer + res.data[k].cover;
-							res.data[k].trailer = mediaServer + res.data[k].trailer;
+							res.data[k].cover = this.mediaServer + res.data[k].cover;
+							res.data[k].trailer = this.mediaServer + res.data[k].trailer;
 							for(var j in res.data[k].poster){
-								res.data[k].poster[j].poster = mediaServer + res.data[k].poster[j].poster;
+								res.data[k].poster[j].poster = this.mediaServer + res.data[k].poster[j].poster;
 							}
 						}
 						this.guessFilmList = res.data

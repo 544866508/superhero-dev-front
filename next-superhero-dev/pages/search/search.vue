@@ -28,8 +28,6 @@
 </template>
 
 <script>
-	import common from "../../common/common.js"
-	var apiServer = common.apiServer, mediaServer = common.mediaServer;
 	export default {
 		data() {
 			return {
@@ -60,14 +58,14 @@
 				
 				//请求主页影片
 				uni.request({
-					url: apiServer + 'api/v1/get/film/',
+					url: this.apiServer + 'api/v1/get/film/',
 					method: 'GET',
 					success: res => {
 						for(var k in res.data){
-							res.data[k].cover = mediaServer + res.data[k].cover;
-							res.data[k].trailer = mediaServer + res.data[k].trailer;
+							res.data[k].cover = this.mediaServer + res.data[k].cover;
+							res.data[k].trailer = this.mediaServer + res.data[k].trailer;
 							for(var j in res.data[k].poster){
-								res.data[k].poster[j].poster = mediaServer + res.data[k].poster[j].poster;
+								res.data[k].poster[j].poster = this.mediaServer + res.data[k].poster[j].poster;
 							}
 						}
 						for(var k in res.data){
@@ -102,17 +100,17 @@
 					uni.showNavigationBarLoading()
 					
 					uni.request({
-						url: apiServer + "api/v1/get/search/",
+						url: this.apiServer + "api/v1/get/search/",
 						method: 'GET',
 						data: {
 							keyword: keyword,
 						},
 						success: res => {
 							for(var k in res.data){
-								res.data[k].cover = mediaServer + res.data[k].cover;
-								res.data[k].trailer = mediaServer + res.data[k].trailer;
+								res.data[k].cover = this.mediaServer + res.data[k].cover;
+								res.data[k].trailer = this.mediaServer + res.data[k].trailer;
 								for(var j in res.data[k].poster){
-									res.data[k].poster[j].poster = mediaServer + res.data[k].poster[j].poster;
+									res.data[k].poster[j].poster = this.mediaServer + res.data[k].poster[j].poster;
 								}
 							}
 							for(var k in res.data){

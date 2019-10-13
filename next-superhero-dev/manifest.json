@@ -98,5 +98,12 @@
     },
     "mp-toutiao" : {
         "usingComponents" : true
+    },
+    "h5" : {
+        "title" : "",
+        "router" : {
+            "base" : "/h5/",
+            "mode" : "history"
+        }
     }
 }

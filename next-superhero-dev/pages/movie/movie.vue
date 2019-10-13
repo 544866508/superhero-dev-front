@@ -101,9 +101,6 @@
 </template>
 
 <script>
-	import common from "../../common/common.js"
-	var apiServer = common.apiServer, mediaServer = common.mediaServer;
-	
 	//倒入自定义组件
 	import scoreComp from "../../components/scoreComp.vue"
 	
@@ -137,20 +134,20 @@
 			
 			//获取传入id的电影详情
 			uni.request({
-				url: apiServer + 'api/v1/get/filmdetail/',
+				url: this.apiServer + 'api/v1/get/filmdetail/',
 				method: 'GET',
 				data: {
 					movie_id: movieId,
 				},
 				success: res => {
-					res.data.cover = mediaServer + res.data.cover;
-					res.data.trailer = mediaServer + res.data.trailer;
+					res.data.cover = this.mediaServer + res.data.cover;
+					res.data.trailer = this.mediaServer + res.data.trailer;
 					for(var k in res.data.poster){
-						res.data.poster[k].poster = mediaServer + res.data.poster[k].poster;
+						res.data.poster[k].poster = this.mediaServer + res.data.poster[k].poster;
 						this.posterArray.push(res.data.poster[k].poster);
 					}
 					for(var k in res.data.actor){
-						res.data.actor[k].photo = mediaServer + res.data.actor[k].photo;
+						res.data.actor[k].photo = this.mediaServer + res.data.actor[k].photo;
 					}
 					this.movieDetail = res.data;
 					this.cover.push(this.movieDetail.cover)

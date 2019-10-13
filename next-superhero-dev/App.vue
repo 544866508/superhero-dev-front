@@ -5,6 +5,7 @@
 		},
 		onShow: function() {
 			console.log('App Show')
+			this.relogin()
 		},
 		onHide: function() {
 			console.log('App Hide')
