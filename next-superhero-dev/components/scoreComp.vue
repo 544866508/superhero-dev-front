@@ -1,18 +1,18 @@
 <!-- 组件说明 -->
 <!-- 传入一个score，展示评分和星星 -->
 
-<template name="scoreComp">
+<template name="scoreComp">	<!-- 定义组件的名称scoreComp -->
 	<view class="movie-score-wapper">
 		<!-- 黄色星星数量 -->
 		<image 
 			v-for="(item, index) in starNum" :key="index"
-			src="../static/icos/star-yellow.png" 
+			:src="starYellow" 
 			class="star-ico">
 		</image>
 		<!-- 灰色星星数量 -->
 		<image
 			v-for="(item, index) in (5-starNum)" :key="index"
-			src="../static/icos/star-gray.png" 
+			:src="starGray" 
 			class="star-ico">
 		</image>
 		<!-- 评分 -->
@@ -30,7 +30,9 @@
 		
 		data() {
 			return {
-				starNum: 0	//星星数量
+				starNum: 0,	//星星数量
+				starYellow: this.mediaServer + "/media/star-yellow.png",
+				starGray: this.mediaServer + "/media/star-gray.png",
 			};
 		},
 		

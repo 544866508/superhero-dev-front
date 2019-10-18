@@ -72,17 +72,14 @@
 	margin-top: 10upx;
 	font-size: 12px;
 }
+.plots-wapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
 /* 剧情介绍 end */
 
-/* 分割线（实线） start */
-.line-wapper {
-	padding: 0upx 20upx;
-}
-.line {
-	height: 1px;
-	background-color: #DBDBDA;
-}
-/* 分割线（实线） end */
+
 
 /* 演职人员 start */
 .nowrap {

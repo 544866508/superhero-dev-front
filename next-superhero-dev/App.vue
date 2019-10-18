@@ -4,9 +4,13 @@
 			console.log('App Launch')
 		},
 		onShow: function() {
+			this.checkJWT()
 			console.log('App Show')
 		},
 		onHide: function() {
+			// if(uni.getStorageSync('AUTH_TOKEN')){
+			// 	uni.removeStorageSync('AUTH_TOKEN')
+			// }
 			console.log('App Hide')
 		}
 	}

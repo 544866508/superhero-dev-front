@@ -12,7 +12,7 @@
 	    ,{
             "path" : "pages/search/search",
             "style" : {
-				"navigationBarTitleText": "搜索预告片"
+				"navigationBarTitleText": "搜索"
 			}
         }
         ,{
@@ -23,16 +23,74 @@
         }
         ,{
             "path" : "pages/movie/movie",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "影片详情"
+			}
         }
         ,{
-            "path" : "pages/login/login",
-            "style" : {}
+            "path" : "pages/me/login/login",
+            "style" : {
+				"navigationBarTitleText": "登录"
+			}
+        }
+        ,{
+            "path" : "pages/me/account_info/account_info",
+            "style" : {
+				"navigationBarTitleText": "账号信息"
+			}
+        }
+        ,{
+            "path" : "pages/me/register/register",
+            "style" : {
+				"navigationBarTitleText": "注册"
+			}
+        }
+        ,{
+            "path" : "pages/me/me_setup/me_setup",
+            "style" : {
+				"navigationBarTitleText": "设置"
+			}
+        }
+        ,{
+            "path" : "pages/me/account_info/action/change_nickname",
+            "style" : {
+				"navigationBarTitleText": "修改昵称"
+			}
+        }
+		,{
+		    "path" : "pages/me/account_info/action/change_saysth",
+		    "style" : {
+				"navigationBarTitleText": "修改签名"
+			}
+		}
+		,{
+		    "path" : "pages/me/account_info/action/change_birthday",
+		    "style" : {
+				"navigationBarTitleText": "修改生日"
+			}
+		}
+		,{
+		    "path" : "pages/me/account_info/action/change_face",
+		    "style" : {
+				"navigationBarTitleText": "修改头像"
+			}
+		}
+        ,{
+            "path" : "pages/me/my_interest/my_interest",
+            "style" : {
+				"navigationBarTitleText": "我的收藏"
+			}
+        }
+        ,{
+            "path" : "pages/me/me_history/me_history",
+            "style" : {
+				"navigationBarTitleText": "历史记录"
+			}
         }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "NEXT超英预告",
+		"navigationBarTitleText": "影视情报局",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},

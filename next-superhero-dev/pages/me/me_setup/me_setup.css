@@ -1,0 +1,35 @@
+.info-darkgray {
+	font-size: 16px;
+	color: darkgray;
+}
+.info-black {
+	font-size: 16px;
+	color: black;
+}
+
+.face {
+	width: 180upx;
+	height: 180upx;
+	border-radius: 100%;
+}
+.u-info-wapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	background-color: white;
+	padding: 20upx 30upx 20upx 30upx;
+}
+.ico {
+	width: 50upx;
+	height: 50upx;
+}
+.row-wapper {
+	display: flex;
+	flex-direction: row;
+}
+.overflow-hidden {
+	/* 过长的名字添加省略号 */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

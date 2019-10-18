@@ -39,7 +39,7 @@
 						</block>
 					</view>
 					<view class="score-words">
-						{{ movieDetail.prised_count }}人点赞
+						{{ movieDetail.prised_count }}人收藏
 					</view>
 				</view>
 			</view>
@@ -50,12 +50,41 @@
 			<view class="line"></view>
 		</view>
 		
-		<!-- 剧情介绍 start -->
 		<view class="plots-block">
-			<view class="plots-title">剧情介绍</view>
-			<view class="plots-desc">{{ movieDetail.plot_desc }}</view>
+			<!-- 剧情介绍 start -->
+			<view class="plots-wapper">
+				<view class="plots-title" style="margin-top: 10upx;">剧情介绍</view>
+				<!-- 收藏 start -->
+				<view v-if="movieDetail.isInterest">
+					<button
+						type="primary" 
+						plain="true" 
+						size="mini" 
+						style="margin-right: 30upx;" 
+						class="button" 
+						@click="nomoralInterest">
+						取消收藏
+					</button>
+				</view>
+				<view v-else>
+					<button
+						type="primary" 
+						plain="true" 
+						size="mini" 
+						style="margin-right: 30upx;" 
+						class="button" 
+						@click="myInterest">
+						收藏
+					</button>
+				</view>
+				<!-- 收藏 end -->
+			</view>
+			<view class="">
+				<view class="plots-desc">{{ movieDetail.plot_desc }}</view>
+			</view>
+			<!-- 剧情介绍 end -->
 		</view>
-		<!-- 剧情介绍 end -->
+		
 		
 		<view class="line-wapper">
 			<view class="line"></view>
@@ -101,9 +130,6 @@
 </template>
 
 <script>
-	import common from "../../common/common.js"
-	var apiServer = common.apiServer, mediaServer = common.mediaServer;
-	
 	//倒入自定义组件
 	import scoreComp from "../../components/scoreComp.vue"
 	
@@ -112,14 +138,15 @@
 			return {
 				movieDetail: {},
 				posterArray: [],
-				cover: [],				
+				cover: [],		
+				movieId: 0,
 			}
 		},
 		//生命周期函数，点击分享时触发，分享本页（仅支持在小程序端，分享到微信群或微信好友）
 		onShareAppMessage(res) {
 			return {
 				title: this.movieDetail.name,
-				path: 'pages/movie/movie?movieId=' + this.movieDetail.id
+				path: 'pages/movie/movie?movieId=' + this.movieId
 			}
 		},
 		onLoad(parms) {
@@ -133,24 +160,54 @@
 			uni.showNavigationBarLoading()
 			
 			//获取上一页面的传参
-			var movieId = parms.movieId;
+			this.movieId = parms.movieId;
+			
+			// 同步到浏览历史记录中
+			var history = uni.getStorageSync("HISTORY")
+			if(history) {
+				// 非首次同步
+				var historyList = history.split(',')
+				// 判断是否重复浏览了本电影
+				if(historyList.indexOf(this.movieId.toString()) > -1) {
+					// 删除重复浏览的本电影id
+					this.deleteByValue(historyList,this.movieId.toString())
+				}
+				historyList.unshift(this.movieId)
+				uni.setStorageSync("HISTORY", historyList + '')
+			}else{
+				// 首次同步
+				var historyList = []
+				historyList.unshift(this.movieId)
+				uni.setStorageSync("HISTORY", historyList + '')
+			}
 			
 			//获取传入id的电影详情
 			uni.request({
-				url: apiServer + 'api/v1/get/filmdetail/',
+				url: this.apiServer + 'api/v1/get/filmdetail/',
 				method: 'GET',
 				data: {
-					movie_id: movieId,
+					movie_id: this.movieId,
 				},
 				success: res => {
-					res.data.cover = mediaServer + res.data.cover;
-					res.data.trailer = mediaServer + res.data.trailer;
+					//获取用户关注过的电影id
+					var filmIdString = uni.getStorageSync('INTEREST_FILM_ID')
+					var filmIdList = filmIdString.split(',')
+					
+					// 为当前影片添加“是否收藏”信息
+					if(filmIdList.indexOf(res.data.id.toString()) > -1) {
+						res.data.isInterest = true
+					}else{
+						res.data.isInterest = false
+					}
+					
+					res.data.cover = this.mediaServer + res.data.cover;
+					res.data.trailer = this.mediaServer + res.data.trailer;
 					for(var k in res.data.poster){
-						res.data.poster[k].poster = mediaServer + res.data.poster[k].poster;
+						res.data.poster[k].poster = this.mediaServer + res.data.poster[k].poster;
 						this.posterArray.push(res.data.poster[k].poster);
 					}
 					for(var k in res.data.actor){
-						res.data.actor[k].photo = mediaServer + res.data.actor[k].photo;
+						res.data.actor[k].photo = this.mediaServer + res.data.actor[k].photo;
 					}
 					this.movieDetail = res.data;
 					this.cover.push(this.movieDetail.cover)
@@ -175,15 +232,103 @@
 				})
 			},
 			lookCover() {
-				debugger;
 				uni.previewImage({
 					urls: this.cover,
 				})
+			},
+			// 用户添加收藏电影
+			myInterest() {
+				uni.showToast({title:"已收藏",icon:'none'});
+				
+				// 按钮取反
+				this.movieDetail.isInterest = ! this.movieDetail.isInterest
+				
+				//获取用户收藏过的电影id
+				var filmIdString = uni.getStorageSync('INTEREST_FILM_ID')
+				var filmIdList = filmIdString.split(',')
+				
+				// 当前电影的id同步到缓存
+				filmIdList.push(this.movieId)
+				uni.setStorageSync('INTEREST_FILM_ID', filmIdList + '');
+				
+				// 当前电影的id同步到后端
+				var user_id = uni.getStorageSync('USER_ID')
+				var auth_token = uni.getStorageSync('AUTH_TOKEN')
+				uni.request({
+					url: this.apiServer + 'api/v1/interest_movie/',
+					method: 'POST',
+					header:{
+						'content-type': "application/x-www-form-urlencoded",
+						'auth-token': auth_token,
+						},
+					data: {
+						user_id: user_id,
+						movie_id: this.movieId,
+					},
+					success: res => {
+						if(res.data.status == 200) {return}
+						else if(res.data.status == 400) {this.relogin()}
+					},
+					fail: () => {
+						uni.showToast({title:"系统错误,响应超时",icon:'none'});return ;
+					},
+					complete: () => {}
+				});
+			},
+			//取消收藏
+			nomoralInterest() {
+				uni.showToast({title:"已取消收藏",icon:'none'});
+				
+				// 按钮取反
+				this.movieDetail.isInterest = ! this.movieDetail.isInterest
+				
+				//获取用户收藏过的电影id
+				var filmIdString = uni.getStorageSync('INTEREST_FILM_ID')
+				var filmIdList = filmIdString.split(',')
+				
+				//从缓存中删除当前电影的id
+				filmIdList = this.deleteByValue(filmIdList, this.movieId)
+				
+				uni.setStorageSync('INTEREST_FILM_ID', filmIdList + '');
+				
+				// 然后同步到后端
+				var user_id = uni.getStorageSync('USER_ID')
+				var auth_token = uni.getStorageSync('AUTH_TOKEN')
+				uni.request({
+					url: this.apiServer + 'api/v1/interest_movie/',
+					method: 'DELETE',
+					header:{
+						'content-type': "application/x-www-form-urlencoded",
+						'auth-token': auth_token,
+						},
+					data: {
+						user_id: user_id,
+						movie_id: this.movieId,
+					},
+					success: res => {
+						if(res.data.status == 200) {return}
+						else if(res.data.status == 400) {this.relogin()}
+					},
+					fail: () => {
+						uni.showToast({title:"系统错误,响应超时",icon:'none'});return ;
+					},
+					complete: () => {}
+				});
+			},
+			deleteByValue(list, value) {
+				
+				for(var i=0; i<list.length; i++){
+					if(value == list[i]){
+						list.splice(i,1)
+					}
+				}
+				return list;
 			},
 		},
 		components:{
 			scoreComp
 		},
+		
 	}
 </script>
 
