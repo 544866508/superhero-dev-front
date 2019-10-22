@@ -64,7 +64,7 @@
 						if(res.data.status == 200){
 							uni.setStorageSync('USERNAME', username + '');
 							uni.setStorageSync('PASSWORD', password + '');
-							var sign = this.relogin("../me/me")
+							var sign = this.relogin("/pages/me/me")
 						}
 					},
 					fail: (e) => {

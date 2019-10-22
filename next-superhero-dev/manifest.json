@@ -1,8 +1,8 @@
 {
-    "name" : "云预告",
+    "name" : "PalmCinema",
     "appid" : "__UNI__9E8235C",
     "description" : "",
-    "versionName" : "1.0.0",
+    "versionName" : "0.2.1",
     "versionCode" : "100",
     "transformPx" : false,
     /* 5+App特有相关 */

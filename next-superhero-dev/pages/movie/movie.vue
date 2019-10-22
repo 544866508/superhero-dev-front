@@ -295,16 +295,12 @@
 				var user_id = uni.getStorageSync('USER_ID')
 				var auth_token = uni.getStorageSync('AUTH_TOKEN')
 				uni.request({
-					url: this.apiServer + 'api/v1/interest_movie/',
+					url: this.apiServer + 'api/v1/interest_movie/?user_id=' + user_id + '&movie_id=' + this.movieId,
 					method: 'DELETE',
 					header:{
 						'content-type': "application/x-www-form-urlencoded",
 						'auth-token': auth_token,
 						},
-					data: {
-						user_id: user_id,
-						movie_id: this.movieId,
-					},
 					success: res => {
 						if(res.data.status == 200) {return}
 						else if(res.data.status == 400) {this.relogin()}

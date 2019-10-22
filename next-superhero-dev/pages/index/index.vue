@@ -1,12 +1,12 @@
 <template>
-	<view class="page">
+	<view class="page" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
 		<!-- 轮播图 -->
-		<swiper class="carousel" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" style="background-color: #555555;">
+		<swiper class="carousel" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" style="background-color: #333333;">
 			<swiper-item v-for="(item, index) in swiperList" :key="index" >
 				<image 
 					:src="item.swiper_img" 
 					class="carousel" 
-					mode="aspectFit"
+					mode="aspectFill"
 					:data-movieId="item.id" 
 					@click="showMovie">
 				</image>
@@ -169,7 +169,11 @@
 				
 				
 				
-				
+				//监听滑动手势
+				flag: 0,
+				// text: '',
+				lastX: 0,
+				lastY: 0
 				
 				// animationData: {},
 				// animationList: [
@@ -222,7 +226,7 @@
 			this.getHotFilmAndNewFilm();
 		},
 		methods: {
-			//请求热门影片
+			//请求热门影片和最新影片
 			getHotFilmAndNewFilm() {
 				//屏幕中央展示一个加载动画
 				uni.showLoading({
@@ -234,6 +238,7 @@
 				uni.showNavigationBarLoading()
 				
 				this.hotFilmList = [];
+				this.newFilmList = [];
 				
 				// 请求热门影片
 				uni.request({
@@ -410,16 +415,12 @@
 				var user_id = uni.getStorageSync('USER_ID')
 				var auth_token = uni.getStorageSync('AUTH_TOKEN')
 				uni.request({
-					url: this.apiServer + 'api/v1/interest_movie/',
+					url: this.apiServer + 'api/v1/interest_movie/?user_id=' + user_id + '&movie_id=' + movieId,
 					method: 'DELETE',
 					header:{
 						'content-type': "application/x-www-form-urlencoded",
 						'auth-token': auth_token,
 						},
-					data: {
-						user_id: user_id,
-						movie_id: movieId,
-					},
 					success: res => {
 						if(res.data.status == 200) {return}
 						else if(res.data.status == 400) {this.relogin()}
@@ -438,6 +439,61 @@
 					}
 				}
 				return list;
+			},
+			
+			//以下函数全是监听滑动手势------------------------------------------------------------------
+			handletouchmove: function(event) {
+				// console.log(event)
+				if (this.flag !== 0) {
+					return;
+				}
+				let currentX = event.touches[0].pageX;
+				let currentY = event.touches[0].pageY;
+				let tx = currentX - this.lastX;
+				let ty = currentY - this.lastY;
+				// let text = '';
+				this.mindex = -1;
+				//左右方向滑动
+				if (Math.abs(tx) > Math.abs(ty)) {
+					if (tx < 0) {
+						// text = '向左滑动';
+						this.flag = 1;
+						console.log('向左滑动')
+						uni.switchTab({
+							url: '../search/search'
+						})
+					 // this.getList();  //调用列表的方法
+					} else if (tx > 0) {
+						// text = '向右滑动';
+						this.flag = 2;
+						console.log('向右滑动')
+					}
+				}
+				// //上下方向滑动
+				// else {
+				// 	if (ty < 0) {
+				// 		// text = '向上滑动';
+				// 		this.flag = 3;
+				// 	//  this.getList();  //调用列表的方法
+				// 	} else if (ty > 0) {
+				// 		// text = '向下滑动';
+				// 		this.flag = 4;
+				// 	}
+				// }
+			
+				//将当前坐标进行保存以进行下一次计算
+				this.lastX = currentX;
+				this.lastY = currentY;
+				// this.text = text;
+			},
+			handletouchstart: function(event) {
+				// console.log(event)
+				this.lastX = event.touches[0].pageX;
+				this.lastY = event.touches[0].pageY;
+			},
+			handletouchend: function(event) {
+				this.flag = 0;
+				// this.text = '没有滑动';
 			},
 			
 		},

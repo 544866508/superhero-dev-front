@@ -48,14 +48,12 @@
 			}
 		},
 		onLoad() {
-			//屏幕中央展示一个加载动画
-			uni.showLoading({
-				//为加载动画增加遮罩，防止用户重复操作
-				mask: true,
-				title: "努力加载中..."
-			})
-			//导航栏上展示一个加载动画
-			uni.showNavigationBarLoading()
+			// //屏幕中央展示一个加载动画
+			// uni.showLoading({
+			// 	//为加载动画增加遮罩，防止用户重复操作
+			// 	mask: true,
+			// 	title: "努力加载中..."
+			// })
 			
 			var user_id = uni.getStorageSync('USER_ID')
 			var auth_token = uni.getStorageSync('AUTH_TOKEN')
@@ -71,26 +69,28 @@
 				success: res => {
 					console.log(res)
 					if(res.data == "") {
-						uni.showToast({title:"还没有收藏过任何电影",icon:'none'});return ;
+						uni.showToast({title:"还没有收藏过任何电影",icon:'none'})
 					}
-					if(res.data[0].status == 200) {
+					else if(res.data[0].status == 200) {
 						console.log(res)
 						for(var k in res.data){
 							res.data[k].cover = this.mediaServer + res.data[k].cover;
 						}
 						this.interestFilmList = res.data
 					}
-					else if(res.data[0].status == 400) {this.relogin()}
+					else if(res.data[0].status == 400) {
+						console.log(400)
+						console.log(res)
+						this.relogin()
+						}
 				},
 				fail: () => {
 					uni.setStorageSync('IS_LOGIN', false)
-					uni.showToast({title:"系统错误，响应超时",icon:'none'});return ;
+					uni.showToast({title:"系统错误，响应超时",icon:'none'})
 				},
-				complete: () => {
-					uni.hideLoading();
-					uni.hideNavigationBarLoading();
-					uni.stopPullDownRefresh();
-				}
+				// complete: () => {
+				// 	uni.hideLoading();
+				// }
 			});
 			
 		},
@@ -123,26 +123,25 @@
 						var user_id = uni.getStorageSync('USER_ID')
 						var auth_token = uni.getStorageSync('AUTH_TOKEN')
 						uni.request({
-							url: _self.apiServer + 'api/v1/interest_movie/',
+							url: _self.apiServer + 'api/v1/interest_movie/?user_id=' + user_id + '&movie_id=' + movieId,
 							method: 'DELETE',
 							header:{
-								'content-type': "application/x-www-form-urlencoded",
 								'auth-token': auth_token,
 								},
-							data: {
-								user_id: user_id,
-								movie_id: movieId,
-							},
 							success: res => {
 								if(res.data.status == 200) {
 									uni.redirectTo({
 										url:"my_interest"
 									})
 								}
-								else if(res.data.status == 400) {_self.relogin()}
+								else if(res.data.status == 400) {
+									console.log(400)
+									console.log(res)
+									_self.relogin()
+									}
 							},
 							fail: () => {
-								uni.showToast({title:"系统错误,响应超时",icon:'none'});return ;
+								uni.showToast({title:"系统错误,响应超时",icon:'none'})
 							},
 							complete: () => {}
 						}); 

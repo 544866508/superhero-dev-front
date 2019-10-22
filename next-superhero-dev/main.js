@@ -3,7 +3,8 @@ import App from './App'
 
 Vue.config.productionTip = false
 
-Vue.prototype.mediaServer = "http://mhuz6u.natappfree.cc";
+// Vue.prototype.mediaServer = "http://ffqbgn.natappfree.cc";
+Vue.prototype.mediaServer = "https://www.zoesama.club";
 Vue.prototype.apiServer = Vue.prototype.mediaServer + "/";
 
 // //检查用户是否登录
@@ -47,7 +48,7 @@ Vue.prototype.checkJWT = function(){
 	var user_id = uni.getStorageSync('USER_ID')
 	var auth_token = uni.getStorageSync('AUTH_TOKEN')
 	if(!user_id || !auth_token ) {
-		uni.showToast({title:"登录后可获得更多权限",icon:'none'});return ;
+		uni.showToast({title:"登录后可获得更多权限",icon:'none'});
 	}
 	uni.request({
 		url: this.apiServer + 'check_jwt/',
@@ -59,12 +60,12 @@ Vue.prototype.checkJWT = function(){
 			user_id: user_id,
 		},
 		success: res => {
-			if(res.data.status == 200){console.log('jwt未过期'); return}
+			if(res.data.status == 200){console.log('jwt未过期')}
 			if(res.data.status == 400){console.log('jwt过期,自动重新登录'); this.relogin()}
 		},
 		fail: () => {
 			uni.setStorageSync('IS_LOGIN', false)
-			uni.showToast({title:"系统错误,响应超时",icon:'none'});return ;
+			uni.showToast({title:"系统错误,响应超时",icon:'none'})
 		},
 		complete: () => {}
 	});
@@ -76,14 +77,14 @@ Vue.prototype.relogin = function(page){
 	var password = uni.getStorageSync('PASSWORD')
 	//如果账号密码在缓存中，但是isLogin = false，说明用户已登录，但是JWT过期
 	if(username && password){				
-		//屏幕中央展示一个加载动画
-		uni.showLoading({
-			//为加载动画增加遮罩，防止用户重复操作
-			mask: true,
-			title: "努力加载中..."
-		})
-		//导航栏上展示一个加载动画
-		uni.showNavigationBarLoading()		
+		// //屏幕中央展示一个加载动画
+		// uni.showLoading({
+		// 	//为加载动画增加遮罩，防止用户重复操作
+		// 	mask: true,
+		// 	title: "努力加载中..."
+		// })
+		// //导航栏上展示一个加载动画
+		// uni.showNavigationBarLoading()		
 				
 		uni.request({
 			url: this.apiServer + 'login/',
@@ -111,22 +112,25 @@ Vue.prototype.relogin = function(page){
 					// 登录状态同步
 					uni.setStorageSync('IS_LOGIN', true)
 					// uni.showToast({title:"登陆过期，已为您重新登录",icon:'none'});return ;
+					uni.switchTab({
+						url:page
+					})
 					
  					console.log(uni.getStorageSync('AUTH_TOKEN'))
 				}else{
 					uni.setStorageSync('IS_LOGIN', false)
-					uni.showToast({title:"relogin失败",icon:'none'});return ;
+					uni.showToast({title:"relogin失败",icon:'none'})
 				}
 			},
 			fail: () => {
 				uni.setStorageSync('IS_LOGIN', false)
-				uni.showToast({title:"系统错误,响应超时",icon:'none'});return ;
+				uni.showToast({title:"系统错误,响应超时",icon:'none'})
 			},
-			complete: () => {
-				uni.hideLoading();
-				uni.hideNavigationBarLoading();
-				uni.stopPullDownRefresh();
-			}
+			// complete: () => {
+			// 	uni.hideLoading();
+			// 	uni.hideNavigationBarLoading();
+			// 	uni.stopPullDownRefresh();
+			// }
 			
 		})
 	}
@@ -151,14 +155,11 @@ Vue.prototype.login_out = function(){
 				var user_id = uni.getStorageSync('USER_ID')
 				var auth_token = uni.getStorageSync('AUTH_TOKEN')
 				uni.request({
-					url: _self.apiServer + 'login_out/',
+					url: _self.apiServer + 'login_out/?user_id=' + user_id,
 					method: 'DELETE',
 					header:{
 						'auth-token': auth_token,
 						},
-					data: {
-						user_id: user_id,
-					},
 					success: res => {
 						if(res.data.status == 200){
 							//删除用户缓存信息
@@ -172,12 +173,17 @@ Vue.prototype.login_out = function(){
 							uni.removeStorageSync('BIRTHDAY');
 							uni.removeStorageSync('SEX');
 							uni.removeStorageSync('INTEREST_FILM_ID');
+							// 如果用户浏览过页面,就删除浏览记录缓存
+							uni.removeStorageSync('HISTORY');
 							// 删除登录状态
 							uni.removeStorageSync('IS_LOGIN')
 							// 转跳
 							uni.switchTab({
 								url:"/pages/me/me",
 							})
+						}
+						if(res.data.status == 400){
+							console.log(123123123)
 						}
 						if(res.data.status == 403){
 							_self.relogin()
@@ -204,14 +210,12 @@ Vue.prototype.login_out = function(){
 }
 // 登录
 Vue.prototype.login = function(submited){
-	//屏幕中央展示一个加载动画
-	uni.showLoading({
-		//为加载动画增加遮罩，防止用户重复操作
-		mask: true,
-		title: "努力加载中..."
-	})
-	//导航栏上展示一个加载动画
-	uni.showNavigationBarLoading()
+	// //屏幕中央展示一个加载动画
+	// uni.showLoading({
+	// 	//为加载动画增加遮罩，防止用户重复操作
+	// 	mask: true,
+	// 	title: "努力加载中..."
+	// })
 	
 	var username = submited.detail.value.username;
 	var password = submited.detail.value.password;
@@ -245,24 +249,22 @@ Vue.prototype.login = function(submited){
 				})
 			}else if(res.data.status == 403){
 				uni.setStorageSync('IS_LOGIN', false)
-				uni.showToast({title:"账号或密码错误",icon:'none'});return ;
+				uni.showToast({title:"账号或密码错误",icon:'none'})
 			}else if(res.data.status == 400){
 				uni.setStorageSync('IS_LOGIN', false)
-				uni.showToast({title:"该用户已登录，请勿重复登录",icon:'none'});return ;
+				uni.showToast({title:"该用户已登录，请勿重复登录",icon:'none'})
 			}else{
 				uni.setStorageSync('IS_LOGIN', false)
-				uni.showToast({title:"请求不存在",icon:'none'});return ;
+				uni.showToast({title:"请求不存在",icon:'none'})
 			}
 		},
 		fail: () => {
 			uni.setStorageSync('IS_LOGIN', false)
-			uni.showToast({title:"系统错误，响应超时",icon:'none'});return ;
+			uni.showToast({title:"系统错误，响应超时",icon:'none'})
 		},
-		complete: () => {
-			uni.hideLoading();
-			uni.hideNavigationBarLoading();
-			uni.stopPullDownRefresh();
-		}
+		// complete: () => {
+		// 	uni.hideLoading();
+		// }
 	});
 }
 
