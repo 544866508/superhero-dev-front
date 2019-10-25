@@ -309,16 +309,32 @@
 			// },
 			
 			interestMe(e) {
-				//获取interestMe事件传入的数据index
-				var index = e.currentTarget.dataset.index;
-				//点击后就对该按钮的值取反
-				this.guessFilmList[index].isInterest = !this.guessFilmList[index].isInterest
-				if(this.guessFilmList[index].isInterest) {
-					//传入影片id进行关注
-					this.myInterest(this.guessFilmList[index].id)
+				// 没登录的用户不能收藏电影
+				if(!uni.getStorageSync('IS_LOGIN')) {
+					var _self = this
+					uni.showModal({
+						title:'提示',
+						content:"登录后才能进行收藏操作，去登录吗？",
+						success(res){
+							if(res.confirm){
+								uni.switchTab({
+									url:"/pages/me/me",
+								})
+							}
+						}
+					})
 				}else{
-					//传入影片id进行取关
-					this.nomoralInterest(this.guessFilmList[index].id)
+					//获取interestMe事件传入的数据index
+					var index = e.currentTarget.dataset.index;
+					//点击后就对该按钮的值取反
+					this.guessFilmList[index].isInterest = !this.guessFilmList[index].isInterest
+					if(this.guessFilmList[index].isInterest) {
+						//传入影片id进行关注
+						this.myInterest(this.guessFilmList[index].id)
+					}else{
+						//传入影片id进行取关
+						this.nomoralInterest(this.guessFilmList[index].id)
+					}
 				}
 			},
 			
@@ -363,7 +379,7 @@
 			},
 			
 			// 用户添加收藏电影
-			myInterest(movieId) {
+			myInterest(movieId) {				
 				uni.showToast({title:"已收藏",icon:'none'});
 				
 				//获取用户收藏过的电影id
@@ -453,20 +469,24 @@
 				let ty = currentY - this.lastY;
 				// let text = '';
 				this.mindex = -1;
-				//左右方向滑动
+				//判断是上下移动还是左右移动
 				if (Math.abs(tx) > Math.abs(ty)) {
-					if (tx < 0) {
-						// text = '向左滑动';
-						this.flag = 1;
-						console.log('向左滑动')
-						uni.switchTab({
-							url: '../search/search'
-						})
-					 // this.getList();  //调用列表的方法
-					} else if (tx > 0) {
-						// text = '向右滑动';
-						this.flag = 2;
-						console.log('向右滑动')
+					//判断移动距离是否大于30
+					if(Math.abs(tx) > 30){
+						//判断具体是左是右
+						if (tx < 0) {
+							// text = '向左滑动';
+							this.flag = 1;
+							console.log('向左滑动')
+							uni.switchTab({
+								url: '../search/search'
+							})
+						 // this.getList();  //调用列表的方法
+						} else if (tx > 0) {
+							// text = '向右滑动';
+							this.flag = 2;
+							console.log('向右滑动')
+						}
 					}
 				}
 				// //上下方向滑动

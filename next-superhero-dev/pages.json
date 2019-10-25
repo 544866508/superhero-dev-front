@@ -64,12 +64,6 @@
 			}
 		}
 		,{
-		    "path" : "pages/me/account_info/action/change_birthday",
-		    "style" : {
-				"navigationBarTitleText": "修改生日"
-			}
-		}
-		,{
 		    "path" : "pages/me/account_info/action/change_face",
 		    "style" : {
 				"navigationBarTitleText": "修改头像"
@@ -90,7 +84,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "影视情报局",
+		"navigationBarTitleText": "PalmCinema",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},

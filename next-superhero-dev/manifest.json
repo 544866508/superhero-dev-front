@@ -100,10 +100,13 @@
         "usingComponents" : true
     },
     "h5" : {
-        "title" : "",
+        "title" : "PalmCinema",
         "router" : {
             "base" : "/h5/",
             "mode" : "history"
+        },
+        "devServer" : {
+            "https" : true
         }
     }
 }

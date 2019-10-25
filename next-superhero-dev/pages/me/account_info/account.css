@@ -10,7 +10,7 @@
 .face {
 	width: 180upx;
 	height: 180upx;
-	border-radius: 100%;
+	border-radius: 5%;
 }
 .u-info-wapper {
 	display: flex;

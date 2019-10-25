@@ -1,5 +1,12 @@
 <template name="cropper">
 	<view>
+		<!-- 当前头像，点击修改 -->
+		<view class="my-face-wapper">
+			<image :src="imgSrc.imgSrc" class="my-face" mode="aspectFill" @click="fSelect"></image>
+		</view>
+		<button type="primary" class="my-button" @click="fSelect">修改头像</button>
+		<button type="primary" class="my-button" @click="back">取消</button>
+		
 		<!-- 上传图片 -->
 		<canvas canvas-id="avatar-canvas" id="avatar-canvas" class="my-canvas" :style="{top: styleTop, height: cvsStyleHeight}"
 		 disable-scroll="false"></canvas>
@@ -76,8 +83,8 @@
 				});
 			}
 			
-			//弹出本机图库
-			this.fSelect()
+			// //弹出本机图库
+			// this.fSelect()
 		},
 		methods: {
 			fWindowResize() {
@@ -515,6 +522,11 @@
 					})));
 				});
 			},
+			back() {
+				uni.navigateBack({
+					delta:1
+				})
+			},
 		}
 	}
 </script>
@@ -569,5 +581,20 @@
 	}
 	.hover {
 		color: #f1f1f1;
+	}
+	.my-face-wapper {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
+	.my-face {
+		margin-top: 30upx;
+		width: 600upx;
+		height: 600upx;
+		border-radius: 5%;
+	}
+	.my-button {
+		margin-top: 30upx;
+		width: 90%;
 	}
 </style>

@@ -73,7 +73,7 @@
 						size="mini" 
 						style="margin-right: 30upx;" 
 						class="button" 
-						@click="myInterest">
+						@click="interestMe">
 						收藏
 					</button>
 				</view>
@@ -235,6 +235,25 @@
 				uni.previewImage({
 					urls: this.cover,
 				})
+			},
+			// 用户收藏电影前，判断是否登录
+			interestMe() {
+				// 没登录的用户不能收藏电影
+				if(!uni.getStorageSync('IS_LOGIN')) {
+					uni.showModal({
+						title:'提示',
+						content:"登录后才能进行收藏操作，去登录吗？",
+						success(res){
+							if(res.confirm){
+								uni.switchTab({
+									url:"/pages/me/me",
+								})
+							}
+						}
+					})
+				}else{
+					this.myInterest()
+				}
 			},
 			// 用户添加收藏电影
 			myInterest() {

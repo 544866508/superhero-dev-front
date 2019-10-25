@@ -9,9 +9,7 @@
 				 头像
 			</view>
 			<view class="row-wapper">
-				<view class="">
-					<image :src="myAccountInfo.face" mode="" class="face"></image>
-				</view>
+				<image :src="myAccountInfo.face" mode="" class="face"></image>
 				<view class="ico-wapper" style="margin-top: 60upx;">
 					<image src="/static/icos/left-gray-arrow.png" mode="" class="ico"></image>
 				</view>
@@ -62,24 +60,6 @@
 			<view class="row-wapper">
 				<view class="info-darkgray">
 					{{ myAccountInfo.sex }}
-				</view>
-				<view class="ico-wapper">
-					<image src="/static/icos/left-gray-arrow.png" mode="" class="ico"></image>
-				</view>
-			</view>
-		</view>
-		
-		<view class="line-wapper">
-			<view class="line"></view>
-		</view>
-		
-		<view class="u-info-wapper" v-model="myAccountInfo" @click="changeBirthday">
-			<view class="info-black">
-				 出生日期
-			</view>
-			<view class="row-wapper">
-				<view class="info-darkgray">
-					{{ myAccountInfo.birthday }}
 				</view>
 				<view class="ico-wapper">
 					<image src="/static/icos/left-gray-arrow.png" mode="" class="ico"></image>
@@ -204,12 +184,6 @@
 						
 				    },
 				});
-			},
-			//修改生日
-			changeBirthday() {
-				uni.navigateTo({
-					url:"action/change_birthday"
-				})
 			},
 			//修改签名
 			changeSaySth() {

@@ -17,11 +17,11 @@
 		},
 		data() {
 			return {
-				 imgurl:""
+				 imgurl:"/static/poster/civilwar.jpg"
 			}
 		},
 		onLoad() {
-			
+			this.imgurl = uni.getStorageSync('FACE')
 		},
 		methods: {
 			//上传返回图片
@@ -82,4 +82,5 @@
 </script>
 
 <style>
+
 </style>

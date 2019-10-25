@@ -177,18 +177,22 @@
 				this.mindex = -1;
 				//左右方向滑动
 				if (Math.abs(tx) > Math.abs(ty)) {
-					if (tx < 0) {
-						// text = '向左滑动';
-						this.flag = 1;
-						console.log('向左滑动')
-					//  this.getList();  //调用列表的方法
-					} else if (tx > 0) {
-						// text = '向右滑动';
-						this.flag = 2;
-						console.log('向右滑动')
-						uni.switchTab({
-							url: '../search/search'
-						})
+					//判断移动距离是否大于30
+					if(Math.abs(tx) > 30){
+						//判断具体是左是右
+						if (tx < 0) {
+							// text = '向左滑动';
+							this.flag = 1;
+							console.log('向左滑动')
+						 // this.getList();  //调用列表的方法
+						} else if (tx > 0) {
+							// text = '向右滑动';
+							this.flag = 2;
+							console.log('向右滑动')
+							uni.switchTab({
+								url: '../search/search'
+							})
+						}
 					}
 				}
 				// //上下方向滑动
